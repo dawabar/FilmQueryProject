@@ -1,7 +1,10 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
+
+import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
 
 public class Actor {
 
@@ -12,6 +15,13 @@ public class Actor {
 
 	public Actor() {
 		super();
+	}
+
+	public Actor(int actorId, String firstName, String lastName) throws SQLException {
+		setId(actorId);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setFilms(actorId);
 	}
 
 	public int getId() {
@@ -42,12 +52,18 @@ public class Actor {
 		return films;
 	}
 
-	public void setFilms(List<Film> films) {
-		this.films = films;
+	public void setFilms(int actorId) throws SQLException {
+		DatabaseAccessorObject dao = new DatabaseAccessorObject();
+		this.films = dao.findFilmsByActorId(actorId);
 	}
 
+	@Override
 	public String toString() {
-		return "ID: " + this.getId() + "\t" + this.getFirstName() + " " + this.getLastName();
+		String actor ="Actor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		for (Film film : films) {
+			actor += "\n\t-- " + film.getTitle();
+		}
+		return actor;
 	}
 
 	@Override

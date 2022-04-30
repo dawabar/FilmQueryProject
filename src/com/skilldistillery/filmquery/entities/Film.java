@@ -1,6 +1,10 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
+
+import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
 
 public class Film {
 	private int id;
@@ -14,13 +18,14 @@ public class Film {
 	private double replacementCost;
 	private String rating;
 	private String features;
+	private List<Actor> cast;
 
 	public Film() {
 		super();
 	}
 
 	public Film(int id, String title, String description, short releaseYear, int languageId, int rentalDuration,
-			double rate, int length, double replacementCost, String rating, String features) {
+			double rate, int length, double replacementCost, String rating, String features, List<Actor> cast) throws SQLException {
 		super();
 		this.id = id;
 		this.title = title;
@@ -33,6 +38,7 @@ public class Film {
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.features = features;
+		this.cast = cast;
 	}
 
 	public int getId() {
@@ -123,11 +129,25 @@ public class Film {
 		this.features = features;
 	}
 
-	public String toString() {
-		return "Title: " + this.getTitle() + "\tRelease Year: " + this.getReleaseYear() + "\tRating: "
-				+ this.getRating();
+	public List<Actor> getCast() {
+		return cast;
 	}
 
+	public void setCast(List<Actor> cast) {
+		this.cast = cast;
+	}
+
+	@Override
+	public String toString() {
+	String film = "Film [id=" + id + ", title=" + title + ", description=" + description + ", releaseYear=" + releaseYear
+				+ ", languageId=" + languageId + ", rentalDuration=" + rentalDuration + ", rate=" + rate + ", length="
+				+ length + ", replacementCost=" + replacementCost + ", rating=" + rating + ", features=" + features;
+	for (Actor actor : cast) {
+		film += "\n\t-- " + actor.getFirstName() + " " + actor.getLastName();
+	}
+	return film;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(description, id, languageId, length, rating, releaseYear, replacementCost, title);
