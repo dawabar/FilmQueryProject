@@ -4,14 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
-
 public class Film {
 	private int id;
 	private String title;
 	private String description;
 	private short releaseYear;
 	private int languageId;
+	private String language;
 	private int rentalDuration;
 	private double rate;
 	private int length;
@@ -24,7 +23,7 @@ public class Film {
 		super();
 	}
 
-	public Film(int id, String title, String description, short releaseYear, int languageId, int rentalDuration,
+	public Film(int id, String title, String description, short releaseYear, int languageId, String language, int rentalDuration,
 			double rate, int length, double replacementCost, String rating, String features, List<Actor> cast) throws SQLException {
 		super();
 		this.id = id;
@@ -32,6 +31,7 @@ public class Film {
 		this.description = description;
 		this.releaseYear = releaseYear;
 		this.languageId = languageId;
+		this.language = language;
 		this.rentalDuration = rentalDuration;
 		this.rate = rate;
 		this.length = length;
@@ -79,6 +79,14 @@ public class Film {
 
 	public void setLanguageId(int languageId) {
 		this.languageId = languageId;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public int getRentalDuration() {
@@ -140,7 +148,7 @@ public class Film {
 	@Override
 	public String toString() {
 	String film = "Film [id=" + id + ", title=" + title + ", description=" + description + ", releaseYear=" + releaseYear
-				+ ", languageId=" + languageId + ", rentalDuration=" + rentalDuration + ", rate=" + rate + ", length="
+				+ ", languageId=" + languageId + ", language=" + language + ", rentalDuration=" + rentalDuration + ", rate=" + rate + ", length="
 				+ length + ", replacementCost=" + replacementCost + ", rating=" + rating + ", features=" + features;
 	for (Actor actor : cast) {
 		film += "\n\t-- " + actor.getFirstName() + " " + actor.getLastName();
@@ -150,7 +158,8 @@ public class Film {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, id, languageId, length, rating, releaseYear, replacementCost, title);
+		return Objects.hash(cast, description, features, id, language, languageId, length, rate, rating, releaseYear,
+				rentalDuration, replacementCost, title);
 	}
 
 	@Override
@@ -162,9 +171,12 @@ public class Film {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
-		return Objects.equals(description, other.description) && id == other.id && languageId == other.languageId
-				&& length == other.length && Objects.equals(rating, other.rating)
-				&& Objects.equals(releaseYear, other.releaseYear)
+		return Objects.equals(cast, other.cast) && Objects.equals(description, other.description)
+				&& Objects.equals(features, other.features) && id == other.id
+				&& Objects.equals(language, other.language) && languageId == other.languageId && length == other.length
+				&& Double.doubleToLongBits(rate) == Double.doubleToLongBits(other.rate)
+				&& Objects.equals(rating, other.rating) && releaseYear == other.releaseYear
+				&& rentalDuration == other.rentalDuration
 				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
 				&& Objects.equals(title, other.title);
 	}

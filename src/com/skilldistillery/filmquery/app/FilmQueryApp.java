@@ -29,7 +29,7 @@ public class FilmQueryApp {
 		Scanner input = new Scanner(System.in);
 
 		startUserInterface(input);
-		
+
 		System.out.println("Goodbye.");
 
 		input.close();
@@ -61,7 +61,7 @@ public class FilmQueryApp {
 			} catch (Exception e) {
 //				startUserInterface(input);
 				System.err.println(e);
-			} 
+			}
 
 		}
 
@@ -70,7 +70,7 @@ public class FilmQueryApp {
 	public boolean handleChoice(int choice, Scanner input) {
 		if (choice == 3) {
 			return false;
-		} else if (choice >0 && choice < 3) {
+		} else if (choice > 0 && choice < 3) {
 			switch (choice) {
 //			case 1:
 //				getActor(input);
@@ -121,14 +121,18 @@ public class FilmQueryApp {
 			} else {
 //				System.out.println(dao.findFilmById(id).toString());
 				Film film = dao.findFilmById(id);
-				System.out.println(film.getTitle() + " | " + film.getReleaseYear() + " | " + film.getRating() + " | \"" + film.getDescription() + "\"");
+				System.out.println(film.getTitle() + " | " + film.getReleaseYear() + " | " + film.getRating() + " | "
+						+ film.getLanguage() + " | \"" + film.getDescription() + "\"");
+				for (Actor actor : film.getCast()) {
+					System.out.println("\t- " + actor.getFirstName() + " " + actor.getLastName());
+				}
 			}
 		} catch (Exception e) {
 //			startUserInterface(input);
 			System.err.println(e);
 		}
 	}
-	
+
 	public void getFilmsByKeyword(Scanner input) {
 		try {
 			System.out.println("Enter a search string for a Film: ");
@@ -141,7 +145,16 @@ public class FilmQueryApp {
 				List<Film> films = new ArrayList<>();
 				films = dao.findFilmsByKeyword(keyword);
 				for (Film film : films) {
-					System.out.println(film.getTitle() + " | " + film.getReleaseYear() + " | " + film.getRating() + " | \"" + film.getDescription() + "\"");
+					System.out.println(film.getTitle() + " | " + film.getReleaseYear() + " | " + film.getRating()
+							+ " | " + film.getLanguage() + " | \"" + film.getDescription() + "\"");
+					List<Actor> actors = film.getCast();
+					if (actors.equals(null)) {
+						continue;
+					} else {
+						for (Actor actor : actors) {
+							System.out.println("\t- " + actor.getFirstName() + " " + actor.getLastName());
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -149,7 +162,7 @@ public class FilmQueryApp {
 			System.err.println(e);
 		}
 	}
-	
+
 	public void getFilmsByActor(Scanner input) {
 		System.out.println("Enter an Actor ID: ");
 		try {
